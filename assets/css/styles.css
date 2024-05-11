@@ -25,6 +25,7 @@ body {
   gap: 1rem;
 }
 
+/* Book card Styling */
 .add-book {
   background-color: dodgerblue;
   padding: 1rem 3rem;
@@ -38,6 +39,10 @@ body {
   font-size: 1.8rem;
 }
 
+.book-title {
+  color: black;
+}
+
 button {
   cursor: pointer;
 }
@@ -46,7 +51,7 @@ button {
   background-color: white;
   color: dodgerblue;
   font-weight: 900;
-  height: 18rem;
+  height: 25rem;
   border-radius: 15px;
   border-left: 5px solid dodgerblue;
   border-right: 5px solid dodgerblue;
@@ -66,10 +71,47 @@ button {
 }
 
 .thumbnail {
-  height: 6rem;
-  width: 6rem;
+  height: 12rem;
+  width: 10rem;
+}
+
+.thumbnail-container {
+  display: grid;
+  justify-content: center;
+}
+
+.btn-status {
+  background-color: lightblue;
+  padding: .5rem 1rem;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 1px 2px 2px 1px gray;
+  margin: 0 10px ;
+  color: red;
+  font-weight: 900;
+}
+
+.btn-remove {
+  background-color: transparent;
+  border-radius: 10px;
+  border: 0;
+  color: white;
+  font-weight: 900;
   
 }
+
+/* Modal styling */
+dialog {
+  border: 0;
+  box-shadow: 2px 2px 2px 1px gray;
+  background-color: #f4f4f5;
+  opacity: .9;
+  width: 50vw;
+  justify-content: center;
+  border-radius: 15px;
+  margin-top: 100px;
+}
+
 
 @media (min-width: 400px) {
   .grid-container {
@@ -79,12 +121,12 @@ button {
 
 @media (min-width: 600px) {
   .grid-container {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (min-width: 900px) {
   .grid-container {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
   }
 }

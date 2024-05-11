@@ -35,7 +35,7 @@ function createElements(element, text = "") {
 }
 
 
-function setAttributes(attributes, element) {
+function setAttributes(attributes, elements = "" | []) {
     let properties = Object.keys(attributes);
     let values = Object.values(attributes);
 
@@ -43,11 +43,19 @@ function setAttributes(attributes, element) {
 
     let valueCount = 0;
 
-   for (let i = 0; i < Object.keys(attributes).length; i++) {
-        attribs = attribs + properties[i] + ": " + values[i] + ";";
-        
-        element.setAttribute(properties[i], values[i]) 
-    }
+   if (Array.isArray(elements)) {
+        elements.map((element) => {
+            for (let i = 0; i < Object.keys(attributes).length; i++) {
+            
+                element.setAttribute(properties[i], values[i]);
+            }
+        })
+   }else {
+        for (let i = 0; i < Object.keys(attributes).length; i++) {
+            
+            elements.setAttribute(properties[i], values[i]);
+        }
+   }
     
      
 }
@@ -63,45 +71,46 @@ function attachElements(parent, children = "" | []) {
 }
 
 
-//Create elements
-let container = document.querySelector('.container');
-let gridContainer = document.createElement('div');
-let dialogModal = createElements('dialog');
-let dialogHeader = createElements('h2', "Enter Book Details");
-
+//Create elements and variables
 
 let bookCard = "";
 let author = "";
-let bookTitleTitle = "";
+let bookTitle = "";
 let pages = "";
 let bookRead = "";
 let thumbnail = "";
 let delButton = '';
+
+let container = document.querySelector('.container');
+let gridContainer = document.createElement('div');
+let dialogModal = createElements('dialog');
+let dialogHeader = createElements('h3', "Enter Book Details");
+let dialogForm = createElements('form');
+let dialogButton = createElements('button', "Submit")
+let txtBookAuthor = createElements('input');
+let txtTitle = createElements('input');
+let numNumberOfPages = createElements('input');
 
 let btnAddBook = createElements('button', "Add Book");
 
 btnAddBook.classList.add('add-book')
 gridContainer.classList.add('grid-container');
 
+/* setAttributes({
+    'open':""
+}, dialogModal) */
+
+setAttributes({'class': 'btn-submit'}, dialogButton)
+setAttributes({'method': 'dialog'}, dialogForm)
+
+attachElements(dialogForm, dialogButton);
 attachElements(container, btnAddBook);
 
-/* 
-<div class="grid-container">
-            <dialog close>
-                <p>Enter Book Details to Add</p>
-                <form method="dialog">
-                <button>OK</button>
-                </form>
-            </dialog>
-        </div>
-*/
-
-setAttributes({
-    'open': ''
-}, dialogModal)
-
-attachElements(gridContainer, dialogModal)
+attachElements(dialogModal, [dialogHeader, dialogForm]);
+attachElements(gridContainer, dialogModal);
 attachElements(container, gridContainer);
+
+let count = 0;
 
 myLibrary.map((book) => {
     bookCard  = createElements('div');
@@ -113,6 +122,8 @@ myLibrary.map((book) => {
     thumbnail = createElements('img');
     thumbnail.classList.add('thumbnail')
 
+    setAttributes({'src': "../assets/images/thehobbit.jpg"}, thumbnail)
+
     bookTitle  = createElements('div', book.title);
     bookTitle.classList.add('book-title');
 
@@ -122,7 +133,42 @@ myLibrary.map((book) => {
     bookRead  = createElements('div', "Status: " + (book.read ? "Read" : "Not read yet"));
     bookRead.classList.add('status');
 
-    attachElements(bookCard, [bookTitle, thumbnail]);
+    author = createElements('h3', "By: " + book.author);
+
+    pages = createElements('h4', book.numberOfPages + " pages.")
+
+    setAttributes({'style':"margin: 6px 10px;"}, [author, pages])
+
+    let thumbnailContainer = createElements("div");
+    thumbnailContainer.classList.add("thumbnail-container");
+
+    let deleteImg = createElements('img');
+    setAttributes({'style': "width: 15px", 'src': "../assets/images/delete-red.png"}, deleteImg)
+
+    let btnRemoveBook = createElements('button');
+    setAttributes({'class': "btn-remove", 'data-btn-remove': "book-" + count + "-remove"}, btnRemoveBook)
+
+    let btnStatus = createElements('button', 'Not Read');
+    setAttributes({'class': "btn-status",'data-btn-status': "book-" + count + "-status"}, btnStatus);
+
+    attachElements(btnRemoveBook, deleteImg);
+
+    attachElements(thumbnailContainer, thumbnail)
+    attachElements(bookCard, [bookTitle, thumbnailContainer, author, pages, btnStatus, btnRemoveBook]);
     attachElements(gridContainer, bookCard);
 
+    count++;
+
 })
+
+
+
+//Events
+dialogButton.onclick = (e) => {
+    dialogModal.close();
+    e.preventDefault();
+}
+
+btnAddBook.onclick = () => {
+    dialogModal.showModal();
+}
