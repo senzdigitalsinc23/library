@@ -112,7 +112,40 @@ dialog {
   margin-top: 100px;
 }
 
+input {
+  width: 100%;
+  margin: 5px 0;
+  border-radius: 10px;
+  border: 1px solid grey;
+  outline: 0;
+  text-align: center;
+  padding: 10px;
+  font-size: 1.8rem;
+  color: dodgerblue;
+}
 
+input:focus{
+  border: 1px solid dodgerblue;
+}
+
+dialog button {
+  background-color: dodgerblue;
+  padding: 1rem 4rem;
+  width: 100%;
+  margin: 10px 0 0 0;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 2px gray;
+  color: #f4f4f5;
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+dialog button:hover {
+  background-color: lightblue;
+  transition: all 0.3s ease-in-out;
+}
+/* Media queries */
 @media (min-width: 400px) {
   .grid-container {
       grid-template-columns: repeat(2, 1fr);
