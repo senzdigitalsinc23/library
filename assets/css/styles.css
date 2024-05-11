@@ -47,7 +47,7 @@ button {
   cursor: pointer;
 }
 
-.book-card {
+[class ^="book-card-"]{
   background-color: white;
   color: dodgerblue;
   font-weight: 900;

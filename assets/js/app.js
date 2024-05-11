@@ -46,7 +46,7 @@ function attachElements(parent, children = "" | []) {
 }
 
 //Methods to add Functionality
-const myLibrary = [];
+let myLibrary = [];
 
 function Book(title, author, numberOfPages, read = false) {
     this.title = title;
@@ -58,12 +58,6 @@ function Book(title, author, numberOfPages, read = false) {
         return (this.title + " by " + this.author + ", " + this.numberOfPages + " pages, " + (read ? "read" : "not read yet"));
     }
 }
-
-const theHobbit = new Book('The Hobbit', 'J.R.R Tolkien', '295');
-const newBook1 = new Book('Atomic Habbits', 'James Clear', '290', true);
-const newBook2 = new Book('The demon of unrest', 'Erik Larson', '295', true);
-const newBook3 = new Book('Say More', 'Jen Psaki', '310');
-const newBook4 = new Book('Indian Cooking', 'Madhur Jaffery', '184', true);
 
 
 //Create elements and variables
@@ -91,22 +85,46 @@ let btnAddBook = createElements('button', "Add Book");
 btnAddBook.classList.add('add-book')
 gridContainer.classList.add('grid-container');
 
-setAttributes({
-    'open':""
-}, dialogModal)
-
 setAttributes({'class': 'btn-submit'}, dialogButton)
 setAttributes({'method': 'dialog'}, dialogForm);
 
 setAttributes({'type': "text"}, [txtBookAuthor, txtTitle]);
 setAttributes({'type': "number", 'min': "2", 'value': "2"}, numNumberOfPages)
 
-let count = 0;
+setAttributes({'name': "txt-book-title"}, txtTitle);
+setAttributes({'name': "txt-book-author"}, txtBookAuthor);
+setAttributes({'name': "txt-book-pages"}, numNumberOfPages);
+
+let countItems = 0;
+
+let books = []; 
+myLibrary.push(new Book("The Hobbit", "J.R.R Tolkien", "295"));
+myLibrary.push(new Book("Chaos", "Charles Manson", "258", true));
+myLibrary.push(new Book("The Woman", "Kristin Hannah", "185"));
+myLibrary.push(new Book("Atomic Habits", "James Clear", "315"));
+myLibrary.push(new Book("The Demon of unrest", "Erik Larson", "95"));
+
+function addBookToLibrary(bookObj = "") {
+
+    if (bookObj !== "") {
+        myLibrary = []
+        myLibrary.push(bookObj)
+    }
+    
+    return myLibrary;
+}
+
+
+function removeBookFromLibrary(id = 0){
+    myLibrary.splice(id, 1);
+}
+
 
 function loadBooks() {
+
     myLibrary.map((book) => {
         bookCard  = createElements('div');
-        bookCard.classList.add('book-card');
+        bookCard.classList.add('book-card-' + countItems);
     
         author  = createElements('div', book.author);
         author.classList.add('author');
@@ -138,85 +156,58 @@ function loadBooks() {
         setAttributes({'style': "width: 15px", 'src': "../assets/images/delete-red.png"}, deleteImg)
     
         let btnRemoveBook = createElements('button');
-        setAttributes({'class': "btn-remove", 'data-btn-remove': "book-" + count + "-remove"}, btnRemoveBook)
-    
+        setAttributes({'class': "btn-remove", 'id': countItems}, btnRemoveBook)
+
         let btnStatus = createElements('button', 'Not Read');
-        setAttributes({'class': "btn-status",'data-btn-status': "book-" + count + "-status"}, btnStatus);
+        setAttributes({'class': "btn-status"}, btnStatus);
     
+       
         attachElements(btnRemoveBook, deleteImg);
     
         attachElements(thumbnailContainer, thumbnail)
         attachElements(bookCard, [bookTitle, thumbnailContainer, author, pages, btnStatus, btnRemoveBook]);
         attachElements(gridContainer, bookCard);
-    
-        count++;
-    
+       
+
+        countItems++;
     })
+   
+
+}
+
+attachElements(container, btnAddBook);
     
-    attachElements(container, btnAddBook);
-    
-    attachElements(dialogForm, [dialogHeader, txtTitle, txtBookAuthor, numNumberOfPages,dialogButton])
-    attachElements(dialogModal, dialogForm);
-    attachElements(gridContainer, dialogModal);
-    attachElements(container, gridContainer);
-}
-
-
-
-//Functionality
-
-function createBook() {
-    console.log(txtTitle.value);
-    return new Book(txtTitle.value, txtBookAuthor.value, numNumberOfPages.value);
-
-}
-function addBookToLibrary(bookObj = "") {    
-    
-    if (bookObj == "") {
-        myLibrary.push(theHobbit, newBook1, newBook2, newBook3, newBook4);
-        return;
-    }
-    myLibrary.push(bookObj);
-    
-}
-
-addBookToLibrary();
-
-function clearModal() {
-    txtBookAuthor.value = "";
-    txtTitle.value = "";
-    numNumberOfPages.value = "";
-}
-
-function resetPage() {
-    gridContainer.textContent = "";
-}
-
-
+attachElements(dialogForm, [dialogHeader, txtTitle, txtBookAuthor, numNumberOfPages,dialogButton])
+attachElements(dialogModal, dialogForm);
+attachElements(container, dialogModal);
 
 loadBooks();
 
-//Events
-dialogButton.onclick = (e) => {
-    
-    
+attachElements(container, gridContainer);
+ let getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
 
-    if (txtTitle.value=== "" || txtBookAuthor.value === "") {
-        alert("You must enter book title and author")
-        dialogModal.close();
-    }else {
-        addBookToLibrary(createBook());
-        resetPage();
+ getAllBooks.forEach(book => {
+    book.onclick = () => {
+        removeBookFromLibrary()
+
         loadBooks();
-        clearModal();
-        
-        dialogModal.close();
+        console.log(addBookToLibrary());
     }
-
-    e.preventDefault();
-}
+ })
 
 btnAddBook.onclick = () => {
     dialogModal.showModal();
+}
+
+dialogButton.onclick = () => {
+    if (txtTitle.value === "" || txtBookAuthor.value === "") {
+        alert("To add a book, enter book title and author name")
+    }else{
+       addBookToLibrary(new Book(txtTitle.value, txtBookAuthor.value, numNumberOfPages.value));
+        
+        loadBooks();
+        console.log(myLibrary);
+        
+    }
 }
 
