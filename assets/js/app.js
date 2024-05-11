@@ -65,18 +65,6 @@ const newBook2 = new Book('The demon of unrest', 'Erik Larson', '295', true);
 const newBook3 = new Book('Say More', 'Jen Psaki', '310');
 const newBook4 = new Book('Indian Cooking', 'Madhur Jaffery', '184', true);
 
-function addBookToLibrary() {
-    myLibrary.push(theHobbit, newBook1, newBook2, newBook3, newBook4);
-}
-
-addBookToLibrary();
-
-function clearModal() {
-    txtBookAuthor.value = "";
-    txtTitle.value = "";
-    numNumberOfPages.value = "";
-}
-
 
 //Create elements and variables
 
@@ -109,6 +97,9 @@ setAttributes({
 
 setAttributes({'class': 'btn-submit'}, dialogButton)
 setAttributes({'method': 'dialog'}, dialogForm);
+
+setAttributes({'type': "text"}, [txtBookAuthor, txtTitle]);
+setAttributes({'type': "number", 'min': "2", 'value': "2"}, numNumberOfPages)
 
 let count = 0;
 
@@ -170,13 +161,58 @@ function loadBooks() {
     attachElements(container, gridContainer);
 }
 
+
+
+//Functionality
+
+function createBook() {
+    console.log(txtTitle.value);
+    return new Book(txtTitle.value, txtBookAuthor.value, numNumberOfPages.value);
+
+}
+function addBookToLibrary(bookObj = "") {    
+    
+    if (bookObj == "") {
+        myLibrary.push(theHobbit, newBook1, newBook2, newBook3, newBook4);
+        return;
+    }
+    myLibrary.push(bookObj);
+    
+}
+
+addBookToLibrary();
+
+function clearModal() {
+    txtBookAuthor.value = "";
+    txtTitle.value = "";
+    numNumberOfPages.value = "";
+}
+
+function resetPage() {
+    gridContainer.textContent = "";
+}
+
+
+
 loadBooks();
 
 //Events
 dialogButton.onclick = (e) => {
-    clearModal();
+    
+    
 
-    dialogModal.close();
+    if (txtTitle.value=== "" || txtBookAuthor.value === "") {
+        alert("You must enter book title and author")
+        dialogModal.close();
+    }else {
+        addBookToLibrary(createBook());
+        resetPage();
+        loadBooks();
+        clearModal();
+        
+        dialogModal.close();
+    }
+
     e.preventDefault();
 }
 
