@@ -65,10 +65,6 @@ const newBook2 = new Book('The demon of unrest', 'Erik Larson', '295', true);
 const newBook3 = new Book('Say More', 'Jen Psaki', '310');
 const newBook4 = new Book('Indian Cooking', 'Madhur Jaffery', '184', true);
 
-function addBookToLibrary() {
-    myLibrary.push(theHobbit, newBook1, newBook2, newBook3, newBook4);
-}
-
 addBookToLibrary();
 
 function clearModal() {
