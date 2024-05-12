@@ -97,30 +97,55 @@ setAttributes({'name': "txt-book-pages"}, numNumberOfPages);
 
 let countItems = 0;
 
-let books = []; 
-myLibrary.push(new Book("The Hobbit", "J.R.R Tolkien", "295"));
-myLibrary.push(new Book("Chaos", "Charles Manson", "258", true));
-myLibrary.push(new Book("The Woman", "Kristin Hannah", "185"));
-myLibrary.push(new Book("Atomic Habits", "James Clear", "315"));
-myLibrary.push(new Book("The Demon of unrest", "Erik Larson", "95"));
+let books = []
+
+let thehobbit = new Book("The Hobbit", "J.R.R Tolkien", "295");
+let chaos = new Book("Chaos", "Charles Manson", "258", true);
+let theWoman = new Book("The Woman", "Kristin Hannah", "185");
+let atomicHabits = new Book("Atomic Habits", "James Clear", "315");
+let demonUnrest = new Book("The Demon of unrest", "Erik Larson", "95");
+
+//let defaultBooks 
+
+myLibrary = [thehobbit, chaos, theWoman, atomicHabits, demonUnrest];
+
 
 function addBookToLibrary(bookObj = "") {
 
-    if (bookObj !== "") {
-        myLibrary = []
+    if (bookObj !== "") {        
         myLibrary.push(bookObj)
     }
     
-    return myLibrary;
-}
-
-
-function removeBookFromLibrary(id = 0){
-    myLibrary.splice(id, 1);
 }
 
 
 function loadBooks() {
+    dialogButton.onclick = () => {
+        if (txtTitle.value === "" || txtBookAuthor.value === "") {
+            alert("To add a book, enter book title and author name")
+        }else{
+            myLibrary = [];
+           addBookToLibrary(new Book(txtTitle.value, txtBookAuthor.value, numNumberOfPages.value));
+            
+           loadBooks()
+            console.log(myLibrary);;           
+        }
+
+        attachElements(container, gridContainer);
+        
+        let getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
+
+        console.log(getAllBooks);
+
+        getAllBooks.forEach(book => {
+            book.onclick = () => {
+            let bookC = document.querySelector('.book-card-'+ book.id);
+
+            bookC.style.display = 'none'
+            }
+        })
+
+    }
 
     myLibrary.map((book) => {
         bookCard  = createElements('div');
@@ -166,8 +191,7 @@ function loadBooks() {
     
         attachElements(thumbnailContainer, thumbnail)
         attachElements(bookCard, [bookTitle, thumbnailContainer, author, pages, btnStatus, btnRemoveBook]);
-        attachElements(gridContainer, bookCard);
-       
+        attachElements(gridContainer, bookCard);      
 
         countItems++;
     })
@@ -175,7 +199,7 @@ function loadBooks() {
 
 }
 
-attachElements(container, btnAddBook);
+attachElements(container, [btnAddBook, gridContainer]);
     
 attachElements(dialogForm, [dialogHeader, txtTitle, txtBookAuthor, numNumberOfPages,dialogButton])
 attachElements(dialogModal, dialogForm);
@@ -183,31 +207,9 @@ attachElements(container, dialogModal);
 
 loadBooks();
 
-attachElements(container, gridContainer);
- let getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
-
- getAllBooks.forEach(book => {
-    book.onclick = () => {
-        removeBookFromLibrary()
-
-        loadBooks();
-        console.log(addBookToLibrary());
-    }
- })
 
 btnAddBook.onclick = () => {
     dialogModal.showModal();
 }
 
-dialogButton.onclick = () => {
-    if (txtTitle.value === "" || txtBookAuthor.value === "") {
-        alert("To add a book, enter book title and author name")
-    }else{
-       addBookToLibrary(new Book(txtTitle.value, txtBookAuthor.value, numNumberOfPages.value));
-        
-        loadBooks();
-        console.log(myLibrary);
-        
-    }
-}
 
