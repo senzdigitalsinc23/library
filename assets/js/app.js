@@ -59,23 +59,6 @@ function Book(title, author, numberOfPages, read = false) {
     }
 }
 
-<<<<<<< HEAD
-const theHobbit = new Book('The Hobbit', 'J.R.R Tolkien', '295');
-const newBook1 = new Book('Atomic Habbits', 'James Clear', '290', true);
-const newBook2 = new Book('The demon of unrest', 'Erik Larson', '295', true);
-const newBook3 = new Book('Say More', 'Jen Psaki', '310');
-const newBook4 = new Book('Indian Cooking', 'Madhur Jaffery', '184', true);
-
-addBookToLibrary();
-
-function clearModal() {
-    txtBookAuthor.value = "";
-    txtTitle.value = "";
-    numNumberOfPages.value = "";
-}
-
-=======
->>>>>>> library-functionality
 
 //Create elements and variables
 
