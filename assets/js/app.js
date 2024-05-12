@@ -46,7 +46,7 @@ function attachElements(parent, children = "" | []) {
 }
 
 //Methods to add Functionality
-const myLibrary = [];
+let myLibrary = [];
 
 function Book(title, author, numberOfPages, read = false) {
     this.title = title;
@@ -59,6 +59,7 @@ function Book(title, author, numberOfPages, read = false) {
     }
 }
 
+<<<<<<< HEAD
 const theHobbit = new Book('The Hobbit', 'J.R.R Tolkien', '295');
 const newBook1 = new Book('Atomic Habbits', 'James Clear', '290', true);
 const newBook2 = new Book('The demon of unrest', 'Erik Larson', '295', true);
@@ -73,6 +74,8 @@ function clearModal() {
     numNumberOfPages.value = "";
 }
 
+=======
+>>>>>>> library-functionality
 
 //Create elements and variables
 
@@ -81,6 +84,7 @@ let author = "";
 let bookTitle = "";
 let pages = "";
 let bookRead = "";
+let bookReadStatus = false;
 let thumbnail = "";
 let delButton = '';
 
@@ -93,25 +97,56 @@ let dialogButton = createElements('button', "Submit")
 let txtBookAuthor = createElements('input');
 let txtTitle = createElements('input');
 let numNumberOfPages = createElements('input');
+let countTrack = createElements('div')
 
 let btnAddBook = createElements('button', "Add Book");
+
+let topBar = createElements('div');
 
 btnAddBook.classList.add('add-book')
 gridContainer.classList.add('grid-container');
 
-setAttributes({
-    'open':""
-}, dialogModal)
-
 setAttributes({'class': 'btn-submit'}, dialogButton)
 setAttributes({'method': 'dialog'}, dialogForm);
 
-let count = 0;
+setAttributes({'type': "text"}, [txtBookAuthor, txtTitle]);
+setAttributes({'type': "number", 'min': "2", 'value': "2"}, numNumberOfPages)
+
+setAttributes({'name': "txt-book-title"}, txtTitle);
+setAttributes({'name': "txt-book-author"}, txtBookAuthor);
+setAttributes({'name': "txt-book-pages"}, numNumberOfPages);
+
+setAttributes({'class':"top-bar"}, topBar);
+setAttributes({'class':"count-track"}, countTrack)
+
+let countItems = 0;
+let booksRead = 0;
+
+let thehobbit = new Book("The Hobbit", "J.R.R Tolkien", "295");
+let chaos = new Book("Chaos", "Charles Manson", "258", true);
+let theWoman = new Book("The Woman", "Kristin Hannah", "185");
+let atomicHabits = new Book("Atomic Habits", "James Clear", "315");
+let demonUnrest = new Book("The Demon of unrest", "Erik Larson", "95");
+
+//let defaultBooks 
+
+myLibrary = [thehobbit, chaos, theWoman, atomicHabits, demonUnrest];
+let totalBooks = myLibrary.length;
+
+function addBookToLibrary(bookObj = "") {
+
+    if (bookObj !== "") {        
+        myLibrary.push(bookObj)
+    }
+    
+}
+
 
 function loadBooks() {
+
     myLibrary.map((book) => {
         bookCard  = createElements('div');
-        bookCard.classList.add('book-card');
+        bookCard.classList.add('book-card-' + countItems);
     
         author  = createElements('div', book.author);
         author.classList.add('author');
@@ -143,40 +178,107 @@ function loadBooks() {
         setAttributes({'style': "width: 15px", 'src': "../assets/images/delete-red.png"}, deleteImg)
     
         let btnRemoveBook = createElements('button');
-        setAttributes({'class': "btn-remove", 'data-btn-remove': "book-" + count + "-remove"}, btnRemoveBook)
-    
+        setAttributes({'class': "btn-remove", 'id': countItems}, btnRemoveBook)
+
         let btnStatus = createElements('button', 'Not Read');
-        setAttributes({'class': "btn-status",'data-btn-status': "book-" + count + "-status"}, btnStatus);
+        setAttributes({'class': "btn-status-" + countItems, 'id': countItems}, btnStatus);
     
+       
         attachElements(btnRemoveBook, deleteImg);
     
         attachElements(thumbnailContainer, thumbnail)
         attachElements(bookCard, [bookTitle, thumbnailContainer, author, pages, btnStatus, btnRemoveBook]);
-        attachElements(gridContainer, bookCard);
-    
-        count++;
-    
+        attachElements(gridContainer, bookCard);      
+
+        countItems++;
     })
+   
+    let getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
+    let bookStatus = document.querySelectorAll("[class ^='btn-status-']");
+
     
-    attachElements(container, btnAddBook);
-    
-    attachElements(dialogForm, [dialogHeader, txtTitle, txtBookAuthor, numNumberOfPages,dialogButton])
-    attachElements(dialogModal, dialogForm);
-    attachElements(gridContainer, dialogModal);
-    attachElements(container, gridContainer);
+
+    dialogButton.onclick = () => {
+        if (txtTitle.value === "" || txtBookAuthor.value === "") {
+            alert("To add a book, enter book title and author name")
+        }else{
+            myLibrary = [];
+           addBookToLibrary(new Book(txtTitle.value, txtBookAuthor.value, numNumberOfPages.value));
+            
+           totalBooks++;
+
+           totalBooksDiv.textContent = "Total Books : " + totalBooks
+
+           loadBooks();   
+        }
+
+        getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
+        bookStatus = document.querySelectorAll("[class ^='btn-status-']");
+
+    }
+
+
+    getAllBooks.forEach(book => {
+        book.onclick = () => {
+            let bookC = document.querySelector('.book-card-'+ book.id);
+            
+            let bookState = document.querySelector('.btn-status-' + book.id).textContent;
+        
+            if (booksRead !== 0 && bookState === "Read") {
+                booksRead--;
+
+                booksReadDiv.textContent = "Books Read : " + booksRead
+            }
+            
+            totalBooks--;
+
+            totalBooksDiv.textContent = "Total Books : " + totalBooks
+
+            bookC.remove()        
+        }
+    })
+
+    bookStatus.forEach(book => {
+        book.onclick = () => {
+            let status = book.textContent;
+          
+            if (status ===  "Not Read") {
+                book.textContent = "Read";
+                setAttributes({'style':"color:white; background-color:green; transition: all 0.5s ease-in-out;padding: 5px 25px"}, book);
+
+                booksRead++;
+            }else{
+                book.textContent = "Not Read";
+                setAttributes({'style':"color:red; background-color:lightblue; transition: all 0.5s ease-in-out;"}, book);
+
+                booksRead--;              
+            }
+
+            booksReadDiv.textContent = "Books Read : " + booksRead
+        }
+    })
+      
 }
 
+
+let totalBooksDiv = createElements('h3', "Total Books : " + totalBooks);
+let booksReadDiv = createElements('h3', "Books Read : " + booksRead)
+
+setAttributes({
+    'style' : "color: dodgerblue; font-size: 2.5rem;margin: 10px 20px"
+}, [totalBooksDiv, booksReadDiv])
+ 
+attachElements(dialogForm, [dialogHeader, txtTitle, txtBookAuthor, numNumberOfPages,dialogButton])
+attachElements(dialogModal, dialogForm);
+attachElements(topBar, [btnAddBook, countTrack]);
+attachElements(countTrack, [totalBooksDiv, booksReadDiv])
+attachElements(container, [topBar, gridContainer, dialogModal]);
+
+addBookToLibrary()
 loadBooks();
-
-//Events
-dialogButton.onclick = (e) => {
-    clearModal();
-
-    dialogModal.close();
-    e.preventDefault();
-}
 
 btnAddBook.onclick = () => {
     dialogModal.showModal();
 }
+
 

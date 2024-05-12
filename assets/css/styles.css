@@ -7,10 +7,31 @@
   box-sizing: border-box;
 }
 body {
-  background-color: wheat;
+  background-color: #eff6ff;
   margin: 0;
   font-size: 1.2rem;
   padding: 1rem;
+}
+
+.top-bar {
+  width: 100%;
+  height: fit-content;
+  padding: 10px;
+  background-color: #bfdbfe;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
+  border-radius: 10px;
+}
+
+
+.count-track {
+  display: flex;
+  justify-content: space-around;
+  width: fit-content;
+  background-color: #eff6ff;
+  padding: 0 10px;
+  border-radius: 10px;
 }
 
 .container {
@@ -30,14 +51,15 @@ body {
   background-color: dodgerblue;
   padding: 1rem 3rem;
   border: 0;
-  margin: 0 0 15px 0;
   border-radius: 15rem;
+  height: 20%;
   box-shadow: 2px 2px 2px grey;
   display: grid;
   color: wheat;
   font-weight: 900;
   font-size: 1.8rem;
 }
+
 
 .book-title {
   color: black;
@@ -47,7 +69,7 @@ button {
   cursor: pointer;
 }
 
-.book-card {
+[class ^="book-card-"]{
   background-color: white;
   color: dodgerblue;
   font-weight: 900;
@@ -80,7 +102,7 @@ button {
   justify-content: center;
 }
 
-.btn-status {
+[class ^="btn-status-"] {
   background-color: lightblue;
   padding: .5rem 1rem;
   border-radius: 10px;
