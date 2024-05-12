@@ -67,6 +67,7 @@ let author = "";
 let bookTitle = "";
 let pages = "";
 let bookRead = "";
+let bookReadStatus = false;
 let thumbnail = "";
 let delButton = '';
 
@@ -97,8 +98,6 @@ setAttributes({'name': "txt-book-pages"}, numNumberOfPages);
 
 let countItems = 0;
 
-let books = []
-
 let thehobbit = new Book("The Hobbit", "J.R.R Tolkien", "295");
 let chaos = new Book("Chaos", "Charles Manson", "258", true);
 let theWoman = new Book("The Woman", "Kristin Hannah", "185");
@@ -120,32 +119,6 @@ function addBookToLibrary(bookObj = "") {
 
 
 function loadBooks() {
-    dialogButton.onclick = () => {
-        if (txtTitle.value === "" || txtBookAuthor.value === "") {
-            alert("To add a book, enter book title and author name")
-        }else{
-            myLibrary = [];
-           addBookToLibrary(new Book(txtTitle.value, txtBookAuthor.value, numNumberOfPages.value));
-            
-           loadBooks()
-            console.log(myLibrary);;           
-        }
-
-        attachElements(container, gridContainer);
-        
-        let getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
-
-        console.log(getAllBooks);
-
-        getAllBooks.forEach(book => {
-            book.onclick = () => {
-            let bookC = document.querySelector('.book-card-'+ book.id);
-
-            bookC.style.display = 'none'
-            }
-        })
-
-    }
 
     myLibrary.map((book) => {
         bookCard  = createElements('div');
@@ -184,7 +157,7 @@ function loadBooks() {
         setAttributes({'class': "btn-remove", 'id': countItems}, btnRemoveBook)
 
         let btnStatus = createElements('button', 'Not Read');
-        setAttributes({'class': "btn-status"}, btnStatus);
+        setAttributes({'class': "btn-status", 'id': countItems}, btnStatus);
     
        
         attachElements(btnRemoveBook, deleteImg);
@@ -196,7 +169,64 @@ function loadBooks() {
         countItems++;
     })
    
+    let getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
+    let bookStatus = document.querySelectorAll("[class ^='btn-status']");
 
+    let booksRead = 0;
+
+    dialogButton.onclick = () => {
+        if (txtTitle.value === "" || txtBookAuthor.value === "") {
+            alert("To add a book, enter book title and author name")
+        }else{
+            myLibrary = [];
+           addBookToLibrary(new Book(txtTitle.value, txtBookAuthor.value, numNumberOfPages.value));
+            
+           loadBooks()     
+        }
+
+        getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
+        bookStatus = document.querySelectorAll("[class ^='btn-status']");
+
+    }
+
+
+        getAllBooks.forEach(book => {
+            book.onclick = () => {
+            let bookC = document.querySelector('.book-card-'+ book.id);
+            let bookState = document.querySelectorAll('.btn-status');
+
+            if (booksRead !== 0) {
+                booksRead--;
+            }
+
+            console.log(bookState);
+            bookC.remove()
+
+            
+            }
+        })
+
+        bookStatus.forEach(book => {
+            book.onclick = () => {
+                let status = book.textContent;
+              
+                if (status ===  "Not Read") {
+                    book.textContent = "Read";
+
+                    setAttributes({'style':"color:white; background-color:green; transition: all 0.5s ease-in-out;padding: 5px 25px"}, book);
+
+                    booksRead++;
+                }else{
+                    book.textContent = "Not Read";
+
+                    setAttributes({'style':"color:red; background-color:lightblue; transition: all 0.5s ease-in-out;"}, book);
+
+                    booksRead--;
+                }
+                console.log(booksRead);
+            }
+        })
+      
 }
 
 attachElements(container, [btnAddBook, gridContainer]);
@@ -205,6 +235,7 @@ attachElements(dialogForm, [dialogHeader, txtTitle, txtBookAuthor, numNumberOfPa
 attachElements(dialogModal, dialogForm);
 attachElements(container, dialogModal);
 
+addBookToLibrary()
 loadBooks();
 
 
