@@ -18,10 +18,29 @@ body {
   height: fit-content;
   padding: 10px;
   background-color: #bfdbfe;
-  display: flex;
-  justify-content: space-between;
   margin: 0 0 10px 0;
   border-radius: 10px;
+}
+
+.logo-next {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.logo {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 5rem;
+  font-weight: bolder;
+  color: #eff6ff;
+  box-shadow: 2px 2px 2px 2px grey;
+  border-radius: 10px;
+  text-shadow: 2px 2px 2px 2px grey;
 }
 
 
@@ -52,7 +71,7 @@ body {
   padding: 1rem 3rem;
   border: 0;
   border-radius: 15rem;
-  height: 20%;
+  height: fit-content;
   box-shadow: 2px 2px 2px grey;
   display: grid;
   color: wheat;
@@ -60,6 +79,11 @@ body {
   font-size: 1.8rem;
 }
 
+.add-book:hover {
+    background-color: #f4f4f5;
+    color: lightblue;
+    transition: all 0.5s ease-in-out;
+}
 
 .book-title {
   color: black;
@@ -79,6 +103,11 @@ button {
   border-right: 5px solid dodgerblue;
   box-shadow: 2px 2px 2px gray;
 
+}
+
+
+[class ^="book-card-"]:hover {
+  transform: scale(1.01);
 }
 
 .book-title {
@@ -113,13 +142,25 @@ button {
   font-weight: 900;
 }
 
+[class ^="btn-status-"]:hover {
+    opacity: .5;
+    transition: all 0.3s ease-in-out;
+}
+
 .btn-remove {
   background-color: transparent;
   border-radius: 10px;
   border: 0;
   color: white;
   font-weight: 900;
+  opacity: .7;
   
+}
+
+.btn-remove:hover{
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+  transform: scale(1.5);
 }
 
 /* Modal styling */
@@ -149,6 +190,8 @@ input {
 input:focus{
   border: 1px solid dodgerblue;
 }
+
+
 
 dialog button {
   background-color: dodgerblue;

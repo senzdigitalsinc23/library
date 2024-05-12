@@ -80,7 +80,9 @@ let dialogButton = createElements('button', "Submit")
 let txtBookAuthor = createElements('input');
 let txtTitle = createElements('input');
 let numNumberOfPages = createElements('input');
-let countTrack = createElements('div')
+let countTrack = createElements('div');
+let logoDiv = createElements('div', "s-LIBRARY");
+let logoNextDiv = createElements('div');
 
 let btnAddBook = createElements('button', "Add Book");
 
@@ -100,7 +102,9 @@ setAttributes({'name': "txt-book-author"}, txtBookAuthor);
 setAttributes({'name': "txt-book-pages"}, numNumberOfPages);
 
 setAttributes({'class':"top-bar"}, topBar);
-setAttributes({'class':"count-track"}, countTrack)
+setAttributes({'class':"count-track"}, countTrack);
+setAttributes({'class': "logo"}, logoDiv);
+setAttributes({'class': "logo-next"}, logoNextDiv)
 
 let countItems = 0;
 let booksRead = 0;
@@ -124,6 +128,11 @@ function addBookToLibrary(bookObj = "") {
     
 }
 
+function clearModal() {
+    txtBookAuthor.value = "";
+    txtTitle.value = "";
+    numNumberOfPages.value = 2;
+}
 
 function loadBooks() {
 
@@ -137,7 +146,7 @@ function loadBooks() {
         thumbnail = createElements('img');
         thumbnail.classList.add('thumbnail')
     
-        setAttributes({'src': "../assets/images/thehobbit.jpg", 'alt': book.title}, thumbnail)
+        setAttributes({'src': "assets/images/thehobbit.jpg", 'alt': book.title}, thumbnail)
     
         bookTitle  = createElements('div', book.title);
         bookTitle.classList.add('book-title');
@@ -158,7 +167,7 @@ function loadBooks() {
         thumbnailContainer.classList.add("thumbnail-container");
     
         let deleteImg = createElements('img');
-        setAttributes({'style': "width: 15px", 'src': "../assets/images/delete-red.png"}, deleteImg)
+        setAttributes({'style': "width: 15px", 'src': "assets/images/delete-red.png"}, deleteImg)
     
         let btnRemoveBook = createElements('button');
         setAttributes({'class': "btn-remove", 'id': countItems}, btnRemoveBook)
@@ -197,6 +206,8 @@ function loadBooks() {
 
         getAllBooks = document.querySelectorAll("[class ^='btn-remove']");
         bookStatus = document.querySelectorAll("[class ^='btn-status-']");
+
+        clearModal();
 
     }
 
@@ -253,7 +264,8 @@ setAttributes({
  
 attachElements(dialogForm, [dialogHeader, txtTitle, txtBookAuthor, numNumberOfPages,dialogButton])
 attachElements(dialogModal, dialogForm);
-attachElements(topBar, [btnAddBook, countTrack]);
+attachElements(logoNextDiv, [btnAddBook, countTrack])
+attachElements(topBar, [logoDiv, logoNextDiv]);
 attachElements(countTrack, [totalBooksDiv, booksReadDiv])
 attachElements(container, [topBar, gridContainer, dialogModal]);
 
